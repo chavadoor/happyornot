@@ -1,0 +1,103 @@
+{
+  "name": "happyornot-ota-manifest",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "happyornot-ota-manifest",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "c1111111-1111-1111-1111-111111111111",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300],
+      "webhookId": "happyornot-ota-manifest"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "http://10.66.66.1:8080/api/method/happy_or_not.api.get_ota_manifest",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "current_version",
+              "value": "={{ $json.query.current_version || '0.0.0' }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Terminal-Secret",
+              "value": "={{ $json.headers['x-terminal-secret'] || '2c0a12c1ad8725a2ce74354db0560c69' }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "c2222222-2222-2222-2222-222222222222",
+      "name": "ERPNext get_ota_manifest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($('ERPNext get_ota_manifest').item.json.message || $('ERPNext get_ota_manifest').item.json) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "c3333333-3333-3333-3333-333333333333",
+      "name": "Respond 200",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [700, 300]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "ERPNext get_ota_manifest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ERPNext get_ota_manifest": {
+      "main": [
+        [
+          {
+            "node": "Respond 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "happy_or_not"
+    }
+  ]
+}

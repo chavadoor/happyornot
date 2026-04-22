@@ -1,0 +1,195 @@
+{
+  "name": "happyornot-vote",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "happyornot-vote",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a1111111-1111-1111-1111-111111111111",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 300],
+      "webhookId": "happyornot-vote"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://10.66.66.1:8080/api/method/happy_or_not.api.ingest_vote",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Terminal-Secret",
+              "value": "={{ $json.headers['x-terminal-secret'] || '2c0a12c1ad8725a2ce74354db0560c69' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false,
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "a2222222-2222-2222-2222-222222222222",
+      "name": "ERPNext ingest_vote",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond1",
+              "leftValue": "={{ $json.message.trigger_alert }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a3333333-3333-3333-3333-333333333333",
+      "name": "If trigger_alert",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api-qh347mzm2r01s0n70ftsjyek:8080/message/sendText/atenea-whatsapp",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "apikey",
+              "value": "06B6059A047E-4423-909D-F3A7F6A523C0"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ number: '5216142450123-1486000127@g.us', text: '[ALERTA] Voto NEGATIVO en ' + ($('Webhook').item.json.body.location_name || $('Webhook').item.json.body.terminal_id) + ' - ' + new Date().toLocaleString('es-MX', {timeZone: 'America/Chihuahua'}) }) }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "a4444444-4444-4444-4444-444444444444",
+      "name": "Send WhatsApp alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [950, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($('ERPNext ingest_vote').item.json) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "a5555555-5555-5555-5555-555555555555",
+      "name": "Respond 200",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1200, 300]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "ERPNext ingest_vote",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ERPNext ingest_vote": {
+      "main": [
+        [
+          {
+            "node": "If trigger_alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If trigger_alert": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WhatsApp alert": {
+      "main": [
+        [
+          {
+            "node": "Respond 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "happy_or_not"
+    }
+  ]
+}
