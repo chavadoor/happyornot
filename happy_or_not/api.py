@@ -139,18 +139,27 @@ def _should_trigger_alert(terminal_id: str, exclude: str) -> bool:
     """Primera alerta por rafaga: si ya hay CUALQUIER voto negativo reciente de
     la misma terminal (dentro del cooldown), no re-alertar — aunque la alerta
     previa haya fallado o aun no se marque alert_sent=1 (evita race).
-    El `exclude` es el doc.name recien insertado — se descarta del check."""
+    El `exclude` es el doc.name recien insertado — se descarta del check.
+
+    BUG HISTORICO: usar TIMESTAMPDIFF(received_at, NOW()) falla porque el DB
+    esta en UTC y `received_at` se guarda en timezone del site (America/Mexico_City,
+    UTC-6). La diferencia siempre da +6h extra, haciendo que nada este dentro
+    del cooldown. Fix: computar cutoff con frappe.now_datetime() (mismo TZ que
+    received_at) y comparar como datetime en SQL."""
+    from frappe.utils import add_to_date
+
     settings = frappe.get_cached_doc("Happy Or Not Settings")
     cooldown = (settings.negative_vote_cooldown_minutes or 10) * 60
+    cutoff = add_to_date(now_datetime(), seconds=-cooldown)
     recent = frappe.db.sql(
         """
         SELECT name FROM `tabEncuesta Satisfaccion`
         WHERE terminal_id = %(tid)s
           AND vote = 'negative'
           AND name != %(ex)s
-          AND TIMESTAMPDIFF(SECOND, received_at, NOW()) < %(cd)s
+          AND received_at >= %(cutoff)s
         LIMIT 1
         """,
-        {"tid": terminal_id, "ex": exclude, "cd": cooldown},
+        {"tid": terminal_id, "ex": exclude, "cutoff": cutoff},
     )
     return not recent
