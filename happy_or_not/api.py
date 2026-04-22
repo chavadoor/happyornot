@@ -5,11 +5,33 @@ en Happy Or Not Settings. El firmware NO habla directo con ERPNext: siempre
 pasa por N8N (capa de desacoplamiento y rate limiting).
 """
 
+from datetime import datetime
+
 import frappe
 from frappe import _
 from frappe.utils import now_datetime
 
 from happy_or_not.utils.auth import require_terminal_secret
+
+
+def _parse_vote_timestamp(ts_str):
+    """Normaliza el timestamp_iso enviado por el firmware.
+
+    - Si viene vacio o invalido -> now_datetime() del site.
+    - Si el firmware aun no sincronizo NTP (manda "2000-01-01T..."), descarta
+      el valor del firmware y usa now_datetime() para no contaminar reportes.
+    - Si viene con timezone offset (ej. "-06:00"), lo remueve: Frappe guarda
+      datetime naive en el timezone del site y MariaDB rechaza el offset.
+    """
+    if not ts_str:
+        return now_datetime()
+    try:
+        dt = datetime.fromisoformat(ts_str)
+    except ValueError:
+        return now_datetime()
+    if dt.year < 2020:
+        return now_datetime()
+    return dt.replace(tzinfo=None) if dt.tzinfo else dt
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
@@ -41,7 +63,7 @@ def ingest_vote():
             "doctype": "Encuesta Satisfaccion",
             "terminal_id": terminal_id,
             "vote": vote,
-            "vote_timestamp": data.get("timestamp_iso") or now_datetime(),
+            "vote_timestamp": _parse_vote_timestamp(data.get("timestamp_iso")),
             "received_at": now_datetime(),
             "was_queued": 1 if data.get("queued") else 0,
             "firmware_version": data.get("firmware_version"),
