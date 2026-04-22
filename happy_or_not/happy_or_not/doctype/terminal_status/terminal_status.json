@@ -1,0 +1,188 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:terminal_id",
+ "creation": "2026-04-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_terminal",
+  "terminal_id",
+  "location_name",
+  "branch",
+  "column_break_terminal",
+  "is_active",
+  "health_status",
+  "ip_address",
+  "section_telemetry",
+  "last_heartbeat",
+  "last_vote_at",
+  "firmware_version",
+  "column_break_telemetry",
+  "wifi_rssi",
+  "uptime_seconds",
+  "free_memory_kb",
+  "queued_votes",
+  "ntp_synced",
+  "section_notes",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_terminal",
+   "fieldtype": "Section Break",
+   "label": "Terminal"
+  },
+  {
+   "description": "Convencion: <branch-slug>-<sala>, ej. riberas-spinning",
+   "fieldname": "terminal_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Terminal ID",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "location_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Ubicacion"
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Sucursal",
+   "options": "Branch"
+  },
+  {
+   "fieldname": "column_break_terminal",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Activa"
+  },
+  {
+   "fieldname": "health_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Salud",
+   "options": "\nonline\nstale\noffline",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ip_address",
+   "fieldtype": "Data",
+   "label": "IP (LAN)"
+  },
+  {
+   "fieldname": "section_telemetry",
+   "fieldtype": "Section Break",
+   "label": "Telemetria (heartbeat)"
+  },
+  {
+   "fieldname": "last_heartbeat",
+   "fieldtype": "Datetime",
+   "label": "Ultimo heartbeat",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_vote_at",
+   "fieldtype": "Datetime",
+   "label": "Ultimo voto",
+   "read_only": 1
+  },
+  {
+   "fieldname": "firmware_version",
+   "fieldtype": "Data",
+   "label": "Version firmware",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_telemetry",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "wifi_rssi",
+   "fieldtype": "Int",
+   "label": "WiFi RSSI",
+   "read_only": 1
+  },
+  {
+   "fieldname": "uptime_seconds",
+   "fieldtype": "Int",
+   "label": "Uptime (s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "free_memory_kb",
+   "fieldtype": "Int",
+   "label": "Memoria libre (KB)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "queued_votes",
+   "fieldtype": "Int",
+   "label": "Votos en cola",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "ntp_synced",
+   "fieldtype": "Check",
+   "label": "NTP sincronizado",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_notes",
+   "fieldtype": "Section Break",
+   "label": "Notas"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notas del admin"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-04-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Happy Or Not",
+ "name": "Terminal Status",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "HR User"
+  },
+  {
+   "read": 1,
+   "role": "Sales Manager"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

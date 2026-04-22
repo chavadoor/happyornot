@@ -1,0 +1,180 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-04-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_vote",
+  "naming_series",
+  "terminal_id",
+  "location_name",
+  "column_break_vote1",
+  "vote",
+  "vote_color",
+  "section_timestamps",
+  "vote_timestamp",
+  "column_break_ts",
+  "received_at",
+  "was_queued",
+  "section_device",
+  "firmware_version",
+  "wifi_rssi",
+  "section_alert",
+  "alert_sent",
+  "alert_sent_at"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_vote",
+   "fieldtype": "Section Break",
+   "label": "Voto"
+  },
+  {
+   "default": "ENC-.YYYY.-.MM.-",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "ENC-.YYYY.-.MM.-.####",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "terminal_id",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Terminal",
+   "options": "Terminal Status",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fetch_from": "terminal_id.location_name",
+   "fieldname": "location_name",
+   "fieldtype": "Data",
+   "label": "Ubicacion",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_vote1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "vote",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Voto",
+   "options": "positive\nregular\nnegative",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "description": "verde / amarillo / rojo (derivado del voto)",
+   "fieldname": "vote_color",
+   "fieldtype": "Data",
+   "label": "Color",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_timestamps",
+   "fieldtype": "Section Break",
+   "label": "Timestamps"
+  },
+  {
+   "description": "Hora en la que se presiono el boton (NTP del ESP32)",
+   "fieldname": "vote_timestamp",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Fecha voto (terminal)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_ts",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "received_at",
+   "fieldtype": "Datetime",
+   "label": "Recibido en ERPNext",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "description": "True si el firmware lo reenvio despues de restaurar conectividad",
+   "fieldname": "was_queued",
+   "fieldtype": "Check",
+   "label": "Viene de cola offline"
+  },
+  {
+   "fieldname": "section_device",
+   "fieldtype": "Section Break",
+   "label": "Telemetria del dispositivo"
+  },
+  {
+   "fieldname": "firmware_version",
+   "fieldtype": "Data",
+   "label": "Version firmware"
+  },
+  {
+   "fieldname": "wifi_rssi",
+   "fieldtype": "Int",
+   "label": "WiFi RSSI"
+  },
+  {
+   "depends_on": "eval:doc.vote==\"negative\"",
+   "fieldname": "section_alert",
+   "fieldtype": "Section Break",
+   "label": "Alerta"
+  },
+  {
+   "default": "0",
+   "fieldname": "alert_sent",
+   "fieldtype": "Check",
+   "label": "Alerta enviada",
+   "read_only": 1
+  },
+  {
+   "fieldname": "alert_sent_at",
+   "fieldtype": "Datetime",
+   "label": "Enviada en",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-04-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Happy Or Not",
+ "name": "Encuesta Satisfaccion",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "HR User"
+  },
+  {
+   "read": 1,
+   "role": "Sales Manager"
+  }
+ ],
+ "sort_field": "vote_timestamp",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

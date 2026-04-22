@@ -1,0 +1,37 @@
+[
+ {
+  "doctype": "Terminal Status",
+  "terminal_id": "riberas-recepcion",
+  "location_name": "Recepcion",
+  "branch": "RIBERAS",
+  "is_active": 1
+ },
+ {
+  "doctype": "Terminal Status",
+  "terminal_id": "riberas-spinning",
+  "location_name": "Salon Spinning",
+  "branch": "RIBERAS",
+  "is_active": 1
+ },
+ {
+  "doctype": "Terminal Status",
+  "terminal_id": "riberas-aerobicos",
+  "location_name": "Salon Aerobicos",
+  "branch": "RIBERAS",
+  "is_active": 1
+ },
+ {
+  "doctype": "Terminal Status",
+  "terminal_id": "riberas-pesas",
+  "location_name": "Area Pesas",
+  "branch": "RIBERAS",
+  "is_active": 1
+ },
+ {
+  "doctype": "Terminal Status",
+  "terminal_id": "riberas-salida",
+  "location_name": "Salida",
+  "branch": "RIBERAS",
+  "is_active": 1
+ }
+]

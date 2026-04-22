@@ -5,6 +5,10 @@ app_description = "Backend para terminales de satisfaccion tipo HappyOrNot"
 app_email = "ops@atenea.uk"
 app_license = "mit"
 
+fixtures = [
+    {"dt": "Terminal Status", "filters": [["branch", "=", "RIBERAS"]]},
+]
+
 # Apps
 # ------------------
 

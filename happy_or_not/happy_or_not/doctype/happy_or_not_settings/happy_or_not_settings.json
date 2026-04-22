@@ -1,0 +1,127 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-04-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_auth",
+  "api_secret_hash",
+  "section_alerts",
+  "alert_whatsapp_group_id",
+  "negative_vote_cooldown_minutes",
+  "section_health",
+  "stale_threshold_minutes",
+  "offline_threshold_minutes",
+  "section_weekly",
+  "weekly_report_enabled",
+  "weekly_report_day",
+  "column_break_weekly",
+  "weekly_report_time",
+  "weekly_report_recipients"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_auth",
+   "fieldtype": "Section Break",
+   "label": "Autenticacion"
+  },
+  {
+   "description": "Hash SHA256 hex del api_secret que el firmware envia en el header X-Terminal-Secret. Generado con: python -c 'import hashlib;print(hashlib.sha256(b\"<secret>\").hexdigest())'",
+   "fieldname": "api_secret_hash",
+   "fieldtype": "Password",
+   "label": "API Secret Hash (SHA256)"
+  },
+  {
+   "fieldname": "section_alerts",
+   "fieldtype": "Section Break",
+   "label": "Alertas WhatsApp"
+  },
+  {
+   "description": "ID del grupo de WhatsApp donde se notifican votos negativos",
+   "fieldname": "alert_whatsapp_group_id",
+   "fieldtype": "Data",
+   "label": "Grupo WhatsApp RH"
+  },
+  {
+   "default": "10",
+   "description": "Dentro de esta ventana por la misma terminal, no se re-dispara alerta",
+   "fieldname": "negative_vote_cooldown_minutes",
+   "fieldtype": "Int",
+   "label": "Cooldown voto negativo (min)"
+  },
+  {
+   "fieldname": "section_health",
+   "fieldtype": "Section Break",
+   "label": "Salud de terminales"
+  },
+  {
+   "default": "10",
+   "fieldname": "stale_threshold_minutes",
+   "fieldtype": "Int",
+   "label": "Umbral stale (min)"
+  },
+  {
+   "default": "30",
+   "fieldname": "offline_threshold_minutes",
+   "fieldtype": "Int",
+   "label": "Umbral offline (min)"
+  },
+  {
+   "fieldname": "section_weekly",
+   "fieldtype": "Section Break",
+   "label": "Reporte semanal"
+  },
+  {
+   "default": "1",
+   "fieldname": "weekly_report_enabled",
+   "fieldtype": "Check",
+   "label": "Habilitar reporte semanal"
+  },
+  {
+   "default": "Monday",
+   "fieldname": "weekly_report_day",
+   "fieldtype": "Select",
+   "label": "Dia",
+   "options": "Monday\nTuesday\nWednesday\nThursday\nFriday\nSaturday\nSunday"
+  },
+  {
+   "fieldname": "column_break_weekly",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "09:00:00",
+   "fieldname": "weekly_report_time",
+   "fieldtype": "Time",
+   "label": "Hora"
+  },
+  {
+   "description": "Numeros/grupos WhatsApp separados por coma",
+   "fieldname": "weekly_report_recipients",
+   "fieldtype": "Small Text",
+   "label": "Destinatarios"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-04-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Happy Or Not",
+ "name": "Happy Or Not Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 0,
+   "print": 0,
+   "read": 1,
+   "role": "System Manager",
+   "share": 0,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
