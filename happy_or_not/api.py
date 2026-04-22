@@ -78,7 +78,7 @@ def ingest_vote():
 
     trigger_alert = False
     if vote == "negative":
-        trigger_alert = _should_trigger_alert(terminal_id)
+        trigger_alert = _should_trigger_alert(terminal_id, exclude=doc.name)
         if trigger_alert:
             doc.db_set("alert_sent", 1)
             doc.db_set("alert_sent_at", now_datetime())
@@ -135,7 +135,11 @@ def get_ota_manifest():
     }
 
 
-def _should_trigger_alert(terminal_id: str) -> bool:
+def _should_trigger_alert(terminal_id: str, exclude: str) -> bool:
+    """Primera alerta por rafaga: si ya hay CUALQUIER voto negativo reciente de
+    la misma terminal (dentro del cooldown), no re-alertar — aunque la alerta
+    previa haya fallado o aun no se marque alert_sent=1 (evita race).
+    El `exclude` es el doc.name recien insertado — se descarta del check."""
     settings = frappe.get_cached_doc("Happy Or Not Settings")
     cooldown = (settings.negative_vote_cooldown_minutes or 10) * 60
     recent = frappe.db.sql(
@@ -143,10 +147,10 @@ def _should_trigger_alert(terminal_id: str) -> bool:
         SELECT name FROM `tabEncuesta Satisfaccion`
         WHERE terminal_id = %(tid)s
           AND vote = 'negative'
-          AND alert_sent = 1
-          AND TIMESTAMPDIFF(SECOND, alert_sent_at, NOW()) < %(cd)s
+          AND name != %(ex)s
+          AND TIMESTAMPDIFF(SECOND, received_at, NOW()) < %(cd)s
         LIMIT 1
         """,
-        {"tid": terminal_id, "cd": cooldown},
+        {"tid": terminal_id, "ex": exclude, "cd": cooldown},
     )
     return not recent
