@@ -146,6 +146,11 @@
       "main": [
         [
           {
+            "node": "Respond 200",
+            "type": "main",
+            "index": 0
+          },
+          {
             "node": "If trigger_alert",
             "type": "main",
             "index": 0
@@ -162,24 +167,12 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Respond 200",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Send WhatsApp alert": {
       "main": [
-        [
-          {
-            "node": "Respond 200",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     }
   },
